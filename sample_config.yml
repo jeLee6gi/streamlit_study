@@ -1,0 +1,22 @@
+study:
+  title: "study name"
+  completion_code: "__PLACEHOLDER__"
+
+paths:
+  db: "study.sqlite"
+  dataset: "dataset.jsonl"
+
+data:
+  instance_id_key: "post_id"
+  instances_per_annotator: 15
+  attention_per_annotator: 2
+
+api:
+  url: "https://api.prolific.com"
+  # prolific study id to check participant status for
+  # you can find this in the URL when you open the page of your study, e.g.:
+  # https://app.prolific.com/researcher/workspaces/studies/{study_id}/
+  study_id: ""
+  # file containing the prolific api token generated on the website
+  # DO NOT COMMIT THIS FILE TO GIT
+  token_file: "./api_token.txt"

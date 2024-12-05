@@ -1,0 +1,19 @@
+def get_attention_indices_offsets(num_instances, num_attention):
+    """This function equally spaces out the required number of attention checks
+    over the number of instances and returns their indices
+    """
+    attention_indices = set(
+        [
+            round((num_instances) / (num_attention + 1) * (i + 1) + (1 * i))
+            for i in range(num_attention)
+        ]
+    )
+
+    attention_offset = 0
+    attention_offsets = []
+    for i in range(num_instances + num_attention):
+        attention_offsets.append(attention_offset)
+        if i in attention_indices:
+            attention_offset += 1
+
+    return attention_indices, attention_offsets
