@@ -6,9 +6,16 @@ import munch
 
 
 def main(config_path):
-    # parse the config file
+    """Creates a new empty database for the study implemented in config_path
+
+    This database keeps track of known mappings between user_id and their
+    assigned instance_ids in a table called `mapping` as well as the
+    participant completion status in a table called `participant_status`
+    """
+    # parse the config file to get the configured db path
     config = munch.Munch.fromYAML(open(config_path))
 
+    # don't create the database if the file already exists
     assert not os.path.exists(config.paths.db)
     con = sqlite3.connect(config.paths.db)
 
