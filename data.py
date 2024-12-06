@@ -29,11 +29,11 @@ def load_jsonl(path: Path) -> list[str]:
     return data
 
 
-def get_frequencies(data, mapping, rejected):
+def get_frequencies(config, data, mapping, rejected):
     logger.info("calculating frequencies for least frequent sampling")
     frequencies = {}
     for instance in data:
-        frequencies[instance["post_id"]] = 0
+        frequencies[instance[config.data.instance_id_key]] = 0
 
     for user_id, instance_ids in mapping.items():
         if user_id in rejected:
@@ -205,7 +205,7 @@ def get_user_instances(
                 participant_status = _participant_status
             rejected = get_rejected(config, participant_status)
 
-            frequencies = get_frequencies(dataset, mapping, rejected)
+            frequencies = get_frequencies(config, dataset, mapping, rejected)
             sample = get_sample(config, user_id, frequencies)
 
             if dry_run:
