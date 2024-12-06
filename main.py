@@ -3,10 +3,9 @@ from functools import partial
 import logging
 import os
 
-import munch
+from munch import Munch
 import streamlit as st
 import streamlit_survey as ss
-import typer
 
 import data
 import content
@@ -102,7 +101,7 @@ def surveyflow(config, config_path, user_id, instances, attentions):
 
 def main(config_path):
     # parse the config file
-    config = munch.Munch.fromYAML(open(config_path))
+    config = Munch.fromYAML(open(config_path))
 
     # Prolific provides the user id as parameter in the URL
     user_id = st.query_params["PROLIFIC_PID"]

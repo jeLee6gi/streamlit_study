@@ -2,7 +2,7 @@ import argparse
 import os
 import sqlite3
 
-import munch
+from munch import Munch
 
 
 def main(config_path):
@@ -13,7 +13,7 @@ def main(config_path):
     participant completion status in a table called `participant_status`
     """
     # parse the config file to get the configured db path
-    config = munch.Munch.fromYAML(open(config_path))
+    config = Munch.fromYAML(open(config_path))
 
     # don't create the database if the file already exists
     assert not os.path.exists(config.paths.db)

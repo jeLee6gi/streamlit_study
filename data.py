@@ -10,9 +10,6 @@ import pyrolific
 # from pyrolific.api.studies import get_studies, export_study
 from pyrolific.api.studies import export_study
 
-import typer
-from typing_extensions import Annotated
-
 
 logger = logging.getLogger(__name__)
 
@@ -234,7 +231,7 @@ def get_attention_instances(config):
     return [{"post id"}] * config.data.attention_per_annotator
 
 
-def _test(db_path: str, user_id: Annotated[str, typer.Argument()] = "foo"):
+def _test(db_path: str, user_id: str = "foo"):
     logging.basicConfig(
         format="[%(asctime)s  %(levelname)s  %(name)s  %(funcName)16s()]:  %(message)s",
         datefmt="%d.%m. %H:%M:%S",
@@ -242,7 +239,3 @@ def _test(db_path: str, user_id: Annotated[str, typer.Argument()] = "foo"):
     )
 
     get_instances({"db_path": db_path}, user_id, dry_run=True)
-
-
-if __name__ == "__main__":
-    typer.run(_test)
