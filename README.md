@@ -7,7 +7,7 @@ Clone this repository, create a new environment using `miniconda` or `micromamba
 ```bash
 conda create -n streamlit
 conda activate streamlit
-conda install python=3.12 streamlit munch -c conda-forge
+conda install python=3.12 streamlit munch pyyaml -c conda-forge
 python -m pip install streamlit_survey pyrolific
 ```
 
