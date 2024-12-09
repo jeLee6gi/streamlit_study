@@ -25,7 +25,7 @@ Run the study server using `streamlit run main.py config.yml`
 
 1. Open a TCP port using `uberspace port add` and remember the port number it gives you. You can retrieve it later though using the command `uberspace port list`. **NB it might take a few minutes for the updated firewall rules to take effect and the port actually being available from the outside. More info here https://manual.uberspace.de/basics-ports/**
 
-2. Run the server specifying the port you opened and the Let's Encrypt-certificates that uberspace provided you with so the connection to your server is encrypted. Replace `${PORT}` with the port number uberspace opened for you and `${ASTEROID}` with the name you picked for you uberspace:
+2. Run the server specifying the port you opened and the Let's Encrypt-certificates that uberspace provided you with so the connection to your server is encrypted. Replace `${PORT}` with the port number uberspace opened for you and `${ASTEROID}` with the name you picked for your uberspace:
 
 ```
 streamlit run --server.port ${PORT} --server.sslCertFile ~/etc/certificates/${ASTEROID}.uber.space.crt --server.sslKeyFile ~/etc/certificates/${ASTEROID}.uber.space.key main.py config.yml
