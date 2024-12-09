@@ -14,7 +14,7 @@ python -m pip install streamlit_survey pyrolific
 ## Preparations
 
 1. Copy `sample_config.yml` to e.g. `config.yml` and change the values as required
-1. Create an api token on prolific and save it to `api_token` or whatever you configured it to in `config.yml`
+1. Create an api token on prolific and save it to `api_token.txt` or whatever you configured it to in `config.yml`
 1. Create a new empty database for your study with `python init_db.py config.yml`
 
 ## Run
