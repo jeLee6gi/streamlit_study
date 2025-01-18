@@ -3,6 +3,7 @@ import time
 import streamlit as st
 
 
+# source: https://discuss.streamlit.io/t/question-about-scroll-event/59333/6
 scroll_to_top_js = """
 <script>
     var body = window.parent.document.querySelector(".main");
@@ -12,6 +13,7 @@ scroll_to_top_js = """
 """
 
 
+# source: https://discuss.streamlit.io/t/question-about-scroll-event/59333/6
 def next_on_click(pages):
     def callback():
         pages.next()
