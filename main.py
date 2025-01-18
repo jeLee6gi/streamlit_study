@@ -49,7 +49,7 @@ def surveyflow(config, config_path, user_id, instances, attentions):
 
     # replace the next and submit buttons with input validated ones
     pages.next_button = lambda pages: validator(
-        pages.current, "Next", on_click=pages.next
+        pages.current, "Next", on_click=utils.next_on_click(pages)
     )
     pages.submit_button = lambda pages: validator(pages.current, "Submit")
 

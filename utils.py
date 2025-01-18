@@ -1,3 +1,29 @@
+import time
+
+import streamlit as st
+
+
+scroll_to_top_js = """
+<script>
+    var body = window.parent.document.querySelector(".main");
+    console.log(body);
+    body.scrollTop = 0;
+</script>
+"""
+
+
+def next_on_click(pages):
+    def callback():
+        pages.next()
+        temp = st.empty()
+        with temp:
+            st.components.v1.html(scroll_to_top_js)
+            time.sleep(0.3)  # To make sure the script can execute before being deleted
+        temp.empty()
+
+    return callback
+
+
 def get_attention_indices_offsets(num_instances, num_attention):
     """This function equally spaces out the required number of attention checks
     over the number of instances and returns their indices
