@@ -74,6 +74,8 @@ def get_sample(
 
 
 def load_token_from_file(path):
+    if not os.path.exists(path):
+        logger.error("api.token_file %s does not exist", path)
     with open(path) as h:
         return h.read().strip()
 
@@ -86,6 +88,7 @@ def get_demographics_from_api(config):
     client = pyrolific.AuthenticatedClient(
         base_url=config.api.url,
         token=token,
+        raise_on_unexpected_status=True,
     )
 
     # list all studies
@@ -196,8 +199,10 @@ def get_user_instances(
             logger.info("new user_id '%s', creating sample", user_id)
             try:
                 _participant_status = get_demographics_from_api(config)
+            except pyrolific.errors.UnexpectedStatus:
+                logger.info("prolific API returned error, using cached demographics")
             except:
-                pass
+                logger.warning("could not load demographics from api, not rejecting anything")
             else:
                 participant_status = _participant_status
             rejected = get_rejected(config, participant_status)
