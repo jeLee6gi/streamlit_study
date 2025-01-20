@@ -80,6 +80,24 @@ def load_token_from_file(path):
         return h.read().strip()
 
 
+def load_demographics_cache(config):
+    demographics_path = f"demographics_{config.api.study_id}.csv"
+    logger.info("loading demographics cache from %s", demographics_path)
+    try:
+        with open(demographics_path) as h:
+            return h.read()
+    except:
+        logger.warning("could not load demographics cache from %s", demographics_path)
+        raise
+
+
+def save_demographics_cache(config, demographics):
+    demographics_path = f"demographics_{config.api.study_id}.csv"
+    logger.info("saving demographics cache to %s", demographics_path)
+    with open(demographics_path, "w") as h:
+         h.write(demographics)
+
+
 def get_demographics_from_api(config):
     _token = load_token_from_file(config.api.token_file)
     token = f"Token {_token}"
@@ -96,11 +114,13 @@ def get_demographics_from_api(config):
     # for x in res.results:
     #     print(f"{x.id} [{x.internal_name}] {x.name}")
 
-    demographics = parse_demographics(
-        pyrolific.api.studies.export_study.sync(
+    try:
+        demographics = pyrolific.api.studies.export_study.sync(
             config.api.study_id, client=client, authorization=token
         )
-    )
+    except pyrolific.errors.UnexpectedStatus:
+        logger.info("prolific API returned error")
+        raise
     logger.debug("API demographics %s", demographics)
 
     return demographics
@@ -197,14 +217,29 @@ def get_user_instances(
             sample = mapping[user_id]
         else:
             logger.info("new user_id '%s', creating sample", user_id)
+            
+            demographics = None
+            # try loading demographics from API
             try:
-                _participant_status = get_demographics_from_api(config)
-            except pyrolific.errors.UnexpectedStatus:
-                logger.info("prolific API returned error, using cached demographics")
+                demographics = get_demographics_from_api(config)
             except:
-                logger.warning("could not load demographics from api, not rejecting anything")
+                logger.warning("could not load demographics from API")
+                # try loading cached demographics
+                try:
+                    demographics = load_demographics_cache(config)
+                except:
+                    logger.warning("could not load demographics from cache")
+                    pass
+            # save new demographics from API
             else:
-                participant_status = _participant_status
+                save_demographics_cache(config, demographics)
+                
+            if demographics is not None:
+                participant_status = parse_demographics(demographics)
+            # happens if both API and cache failed
+            else:
+                logger.warning("!!! COULD NOT LOAD DEMOGRAPHICS FROM API OR CACHE, NOT REJECTING !!!")
+                participant_status = {}
             rejected = get_rejected(config, participant_status)
 
             frequencies = get_frequencies(config, dataset, mapping, rejected)
